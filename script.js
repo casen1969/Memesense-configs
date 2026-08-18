@@ -76,12 +76,22 @@
     return (cfg.tags || []).slice(0, 3).map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('');
   }
 
+  function getVersions(cfg) {
+    if (cfg.versions && cfg.versions.length) return cfg.versions;
+    return [{ version: '1.0', code: cfg.code, date: cfg.created_at, changes: (cfg.changelog || []).flatMap((e) => e.changes || []) }];
+  }
+
+  function latestVersion(cfg) {
+    const v = getVersions(cfg);
+    return v.length ? v[0].version : '1.0';
+  }
+
   function cardHtml(cfg) {
     return `
-      <article class="config-card" data-id="${cfg.id}">
+      <article class="config-card" data-id="${cfg.id}" id="config-${cfg.id}">
         <div class="card-top">
           <span class="card-badge">${escapeHtml(cfg.category)}</span>
-          <span class="card-version">${cfg.changelog && cfg.changelog.length ? `v${escapeHtml(cfg.changelog[0].version)}` : 'v1'}</span>
+          <span class="card-version">v${escapeHtml(latestVersion(cfg))}</span>
         </div>
         <h3 class="card-title">${escapeHtml(cfg.title)}</h3>
         <p class="card-desc">by <strong>${escapeHtml(cfg.author)}</strong></p>
@@ -166,10 +176,29 @@
     return loadData().find((c) => c.id === id);
   }
 
+  function versionSelectHtml(cfg) {
+    const versions = getVersions(cfg);
+    if (versions.length < 2) return '';
+    const options = versions
+      .map(
+        (v, i) =>
+          `<option value="${escapeHtml(v.version)}"${i === 0 ? ' selected' : ''}>v${escapeHtml(v.version)}</option>`
+      )
+      .join('');
+    return `
+      <div class="version-row">
+        <label class="version-label" for="versionSelect">Version</label>
+        <select id="versionSelect" class="select" aria-label="Select config version">
+          ${options}
+        </select>
+      </div>`;
+  }
+
   function changelogHtml(cfg) {
-    const log = cfg.changelog || [];
-    if (!log.length) return '';
-    const items = log
+    const versions = getVersions(cfg);
+    const withChanges = versions.filter((v) => (v.changes || []).length);
+    if (!withChanges.length) return '';
+    const items = withChanges
       .map(
         (entry) => `
         <div class="cl-item">
@@ -192,17 +221,23 @@
 
   function openModal(cfg) {
     let current = cfg;
+    const versions = getVersions(current);
+    let currentVersion = versions.length ? versions[0] : null;
+    let activeCode = currentVersion ? currentVersion.code : current.code;
+
+    const codeBlock = `<div class="code-block">${escapeHtml(activeCode)}</div>`;
 
     modalContent.innerHTML = `
       <div class="modal-head">
         <span class="card-badge">${escapeHtml(current.category)}</span>
-        <h3 class="modal-title">${escapeHtml(current.title)}</h3>
+        <h3 class="modal-title" id="modalTitle">${escapeHtml(current.title)}</h3>
       </div>
       <div class="modal-meta">
         <span>Author: <strong>${escapeHtml(current.author)}</strong></span>
         <span>${timeAgo(current.created_at) || ''}</span>
       </div>
-      <div class="code-block">${escapeHtml(current.code)}</div>
+      ${versionSelectHtml(current)}
+      <div class="code-block" id="modalCode">${escapeHtml(activeCode)}</div>
       ${changelogHtml(current)}
       <div class="modal-actions">
         <button class="btn btn-primary btn-sm" data-copy>Copy Config Code</button>
@@ -211,10 +246,22 @@
     modal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
 
+    const versionSelect = modalContent.querySelector('#versionSelect');
+    if (versionSelect) {
+      versionSelect.addEventListener('change', () => {
+        const v = versions.find((x) => x.version === versionSelect.value);
+        if (v) {
+          currentVersion = v;
+          activeCode = v.code;
+          modalContent.querySelector('#modalCode').textContent = activeCode;
+        }
+      });
+    }
+
     modalContent.querySelector('[data-copy]').addEventListener('click', async () => {
       const btn = modalContent.querySelector('[data-copy]');
       try {
-        await navigator.clipboard.writeText(current.code);
+        await navigator.clipboard.writeText(activeCode);
         btn.textContent = 'Copied!';
       } catch {
         btn.textContent = 'Copy failed';
@@ -223,11 +270,12 @@
     });
 
     modalContent.querySelector('[data-download]').addEventListener('click', () => {
-      const blob = new Blob([current.code], { type: 'text/plain' });
+      const blob = new Blob([activeCode], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
+      const suffix = currentVersion ? `_v${currentVersion.version}` : '';
       a.href = url;
-      a.download = `${current.title.toLowerCase().replace(/[^a-z0-9]+/g, '_')}.cfg`;
+      a.download = `${current.title.toLowerCase().replace(/[^a-z0-9]+/g, '_')}${suffix}.cfg`;
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -281,7 +329,10 @@
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
   if (hamburger && navLinks) {
-    hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    hamburger.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
     navLinks.querySelectorAll('a').forEach((a) =>
       a.addEventListener('click', () => navLinks.classList.remove('open'))
     );
@@ -387,6 +438,7 @@
         created_at: cfg.created_at,
         code: cfg.code,
         ...(cfg.changelog ? { changelog: cfg.changelog } : {}),
+        ...(cfg.versions ? { versions: cfg.versions } : {}),
       },
       null,
       2
@@ -401,6 +453,37 @@
     categoryFilter.appendChild(opt);
   });
 
+  function injectStructuredData() {
+    try {
+      const base = document.querySelector('link[rel="canonical"]')?.href || location.href;
+      const items = allConfigs.map((c) => ({
+        '@type': 'SoftwareApplication',
+        name: c.title,
+        applicationCategory: 'GameApplication',
+        author: { '@type': 'Person', name: c.author },
+        description: `${c.title} MemeSense config by ${c.author}. Category: ${c.category}.`,
+        url: `${base}#config-${c.id}`,
+        ...(getVersions(c).length ? { softwareVersion: latestVersion(c) } : {}),
+      }));
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = 'config-list-ld';
+      script.textContent = JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        name: 'MemeSense Config Database',
+        itemListElement: items.map((item, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          item,
+        })),
+      });
+      const existing = document.getElementById('config-list-ld');
+      if (existing) existing.remove();
+      document.head.appendChild(script);
+    } catch {}
+  }
+
   async function init() {
     if (!Array.isArray(window.CONFIGS)) {
       allConfigs = [];
@@ -411,6 +494,7 @@
     renderFeatured();
     renderLeaderboard();
     renderStats();
+    injectStructuredData();
     renderedCount = PAGE_SIZE;
     renderConfigs();
   }

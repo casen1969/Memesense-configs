@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://casen1969.github.io/Memesense-configs/sitemap.xml
