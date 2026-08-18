@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MSConfigs - The #1 community database for leaked MemeSense configs. Browse, upload, and rate the best configs." />
+  <title>MSConfigs — MemeSense Config Database</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+
+  <header class="site-header">
+    <nav class="navbar container">
+      <a href="#" class="brand">
+        <span class="brand-mark">MS</span>
+        <span class="brand-text">CONFIGS</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#configs" class="nav-link">Configs</a></li>
+        <li><a href="#featured" class="nav-link">Featured</a></li>
+        <li><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
+        <li><a href="#upload" class="nav-link">Upload</a></li>
+      </ul>
+      <button class="btn btn-primary nav-cta" data-open-upload>Upload Config</button>
+      <button class="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <p class="eyebrow">THE COMMUNITY CONFIG VAULT</p>
+        <h1 class="hero-title">
+          Leaked <span class="accent">MemeSense</span><br />
+          Config Database
+        </h1>
+        <p class="hero-sub">
+          Thousands of configs. One home. Browse, rate, and share the community's most
+          sought-after MemeSense configs — completely free.
+        </p>
+        <div class="hero-actions">
+          <a href="#configs" class="btn btn-primary btn-lg">Browse Configs</a>
+          <button class="btn btn-ghost btn-lg" data-open-upload>Upload Yours</button>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-value" id="statConfigs">0</span>
+            <span class="stat-label">Configs</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="featured">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">Featured Configs</h2>
+          <p class="section-sub">Hand-picked by the community</p>
+        </div>
+        <div id="featuredGrid" class="cards-grid"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="configs">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">Config Database</h2>
+          <p class="section-sub">Search, filter and copy any leaked config</p>
+        </div>
+
+        <div class="toolbar">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.3-4.3"></path>
+            </svg>
+            <input id="searchInput" type="text" placeholder="Search configs, authors, tags..." />
+          </div>
+          <div class="filters">
+            <select id="categoryFilter" class="select">
+              <option value="all">All Categories</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="configsGrid" class="cards-grid"></div>
+        <div class="load-more-wrap">
+          <button id="loadMore" class="btn btn-ghost">Load More</button>
+        </div>
+        <p id="emptyState" class="empty-state hidden">No configs found. Try a different search.</p>
+      </div>
+    </section>
+
+    <section class="section" id="leaderboard">
+      <div class="container">
+        <div class="section-head">
+          <h2 class="section-title">Top Uploaders</h2>
+          <p class="section-sub">The grinders feeding the vault</p>
+        </div>
+        <div id="leaderboardList" class="leaderboard"></div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="upload">
+      <div class="container upload-wrap">
+        <div class="upload-card">
+          <h2 class="section-title">Upload a Config</h2>
+          <p class="section-sub">New configs save to your browser and generate a block to add to <code>configs.js</code></p>
+          <form id="uploadForm" class="upload-form">
+            <div class="form-row">
+              <div class="field">
+                <label for="cfgName">Config Name</label>
+                <input id="cfgName" type="text" placeholder="e.g. Blatant Rage 2.0" required />
+              </div>
+              <div class="field">
+                <label for="cfgCategory">Category</label>
+                <select id="cfgCategory" class="select" required>
+                  <option value="">Select...</option>
+                  <option value="rage">Rage</option>
+                  <option value="legit">Legit</option>
+                  <option value="semi-rage">Semi-Rage</option>
+                  <option value="esp">ESP</option>
+                  <option value="misc">Misc</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="cfgAuthor">Author</label>
+              <input id="cfgAuthor" type="text" placeholder="Your name" required />
+            </div>
+            <div class="field">
+              <label for="cfgCode">Config Code</label>
+              <textarea id="cfgCode" rows="8" placeholder="Paste the leaked config code here..." required></textarea>
+            </div>
+            <div class="field">
+              <label for="cfgTags">Tags <span class="muted">(comma separated)</span></label>
+              <input id="cfgTags" type="text" placeholder="config, legit, cfg" />
+            </div>
+            <div class="field">
+              <label for="cfgChangelog">Changelog <span class="muted">(optional, one change per line)</span></label>
+              <textarea id="cfgChangelog" rows="4" placeholder="Improved resolver&#10;Fixed ESP glitches&#10;New menu colors"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Submit Config</button>
+            <p id="uploadStatus" class="upload-status"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay hidden" id="configModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+          <path d="M18 6 6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">MS</span>
+        <span class="brand-text">CONFIGS</span>
+      </div>
+      <p class="footer-note">MSConfigs is a fan-made community project. All configs load from <code>configs.js</code> — edit that file in your repository to update the site. We do not host or distribute any cheat software — only user-submitted config files.</p>
+      <p class="footer-copy">© 2026 MSConfigs. For educational purposes only.</p>
+    </div>
+  </footer>
+
+  <script src="configs.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
