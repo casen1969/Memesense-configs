@@ -3,8 +3,6 @@
 
   const PAGE_SIZE = 6;
 
-  const STORE_KEY = 'ms_configs';
-
   const featuredGrid = document.getElementById('featuredGrid');
   const configsGrid = document.getElementById('configsGrid');
   const leaderboardList = document.getElementById('leaderboardList');
@@ -15,38 +13,14 @@
   const modal = document.getElementById('configModal');
   const modalContent = document.getElementById('modalContent');
   const modalClose = document.getElementById('modalClose');
-  const uploadForm = document.getElementById('uploadForm');
-  const uploadStatus = document.getElementById('uploadStatus');
 
-  const categories = ['rage', 'legit', 'semi-rage', 'esp', 'misc'];
+  const categories = ['rage', 'legit', 'semi-rage'];
 
   let allConfigs = [];
   let renderedCount = 0;
 
-  // ---- Local storage helpers ----
-  const store = {
-    get(key, fallback) {
-      try {
-        const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : fallback;
-      } catch {
-        return fallback;
-      }
-    },
-    set(key, value) {
-      try {
-        localStorage.setItem(key, JSON.stringify(value));
-      } catch {}
-    },
-  };
-
   function loadData() {
-    const uploaded = store.get(STORE_KEY, []);
-    return [...uploaded, ...allConfigs];
-  }
-
-  function saveUploads(uploads) {
-    store.set(STORE_KEY, uploads);
+    return allConfigs;
   }
 
   // ---- Rendering ----
@@ -340,113 +314,6 @@
     });
     navLinks.querySelectorAll('a').forEach((a) =>
       a.addEventListener('click', () => navLinks.classList.remove('open'))
-    );
-  }
-
-  document.querySelectorAll('[data-open-upload]').forEach((btn) =>
-    btn.addEventListener('click', () => {
-      const target = document.getElementById('upload');
-      if (target) target.scrollIntoView({ behavior: 'smooth' });
-    })
-  );
-
-  uploadForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const title = document.getElementById('cfgName').value.trim();
-    const category = document.getElementById('cfgCategory').value;
-    const author = document.getElementById('cfgAuthor').value.trim();
-    const code = document.getElementById('cfgCode').value.trim();
-    const tagsRaw = document.getElementById('cfgTags').value.trim();
-    const changelogRaw = document.getElementById('cfgChangelog').value.trim();
-
-    if (!title || !category || !author || !code) {
-      uploadStatus.classList.add('error');
-      uploadStatus.textContent = 'Please fill in all required fields.';
-      return;
-    }
-
-    const tags = tagsRaw
-      ? tagsRaw.split(',').map((t) => t.trim().toLowerCase()).filter(Boolean)
-      : [category];
-
-    const changes = changelogRaw
-      ? changelogRaw.split('\n').map((l) => l.trim()).filter(Boolean)
-      : [];
-    const changelog = changes.length
-      ? [
-          {
-            version: '1.0',
-            date: new Date().toISOString().slice(0, 10),
-            changes,
-          },
-        ]
-      : [];
-
-    const newConfig = {
-      id: Date.now(),
-      title,
-      category,
-      author,
-      tags,
-      featured: false,
-      created_at: new Date().toISOString().slice(0, 19).replace('T', ' '),
-      code,
-    };
-    if (changelog.length) newConfig.changelog = changelog;
-
-    const uploads = store.get(STORE_KEY, []);
-    uploads.unshift(newConfig);
-    saveUploads(uploads);
-
-    uploadStatus.classList.remove('error');
-    uploadStatus.textContent = 'Saved in your browser! Copy the block below and paste it into configs.js to publish it for everyone.';
-    showRepoJson(newConfig);
-    uploadForm.reset();
-
-    renderFeatured();
-    renderLeaderboard();
-    renderStats();
-    renderedCount = PAGE_SIZE;
-    renderConfigs();
-    const card = configsGrid.querySelector(`[data-id="${newConfig.id}"]`);
-    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
-
-  function showRepoJson(cfg) {
-    let existing = document.getElementById('repoJsonBox');
-    if (!existing) {
-      const wrap = document.createElement('div');
-      wrap.className = 'repo-json';
-      wrap.innerHTML = `
-        <p class="upload-status">To publish this config to everyone, add this object to <code>configs.js</code> (inside the <code>window.CONFIGS = [...]</code> array) and commit:</p>
-        <textarea id="repoJsonText" rows="6" readonly></textarea>
-        <button type="button" class="btn btn-ghost btn-sm" id="copyRepoJson">Copy JSON</button>`;
-      uploadStatus.after(wrap);
-      wrap.querySelector('#copyRepoJson').addEventListener('click', () => {
-        const textarea = document.getElementById('repoJsonText');
-        navigator.clipboard.writeText(textarea.value).then(() => {
-          const btn = document.getElementById('copyRepoJson');
-          btn.textContent = 'Copied!';
-          setTimeout(() => (btn.textContent = 'Copy JSON'), 1600);
-        });
-      });
-      existing = wrap;
-    }
-    document.getElementById('repoJsonText').value = JSON.stringify(
-      {
-        id: cfg.id,
-        title: cfg.title,
-        category: cfg.category,
-        author: cfg.author,
-        tags: cfg.tags,
-        featured: false,
-        created_at: cfg.created_at,
-        code: cfg.code,
-        ...(cfg.changelog ? { changelog: cfg.changelog } : {}),
-        ...(cfg.versions ? { versions: cfg.versions } : {}),
-      },
-      null,
-      2
     );
   }
 

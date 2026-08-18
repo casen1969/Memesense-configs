@@ -263,9 +263,6 @@ body {
     padding: 16px 24px;
     border-bottom: 1px solid var(--border);
   }
-  .nav-cta {
-    display: none;
-  }
   .hamburger {
     display: flex;
   }
@@ -618,102 +615,6 @@ body {
   font-size: 0.9rem;
 }
 
-/* ---- Upload ---- */
-.upload-wrap {
-  max-width: 760px;
-}
-
-.upload-card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 40px;
-  text-align: center;
-}
-
-.upload-form {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  text-align: left;
-  margin-top: 30px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.field label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--muted);
-}
-
-.muted {
-  color: var(--muted);
-  font-weight: 400;
-}
-
-.field input,
-.field textarea {
-  background: var(--bg-2);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px 14px;
-  color: var(--text);
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  resize: vertical;
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-.field input:focus,
-.field textarea:focus {
-  border-color: var(--accent);
-}
-
-.upload-status {
-  font-size: 0.9rem;
-  color: var(--success);
-  min-height: 20px;
-}
-.upload-status.error {
-  color: var(--accent-bright);
-}
-
-.repo-json {
-  margin-top: 10px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.repo-json textarea {
-  background: #0d0d10;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 12px;
-  color: #d4d4d8;
-  font-family: 'Consolas', 'Courier New', monospace;
-  font-size: 0.8rem;
-  line-height: 1.5;
-  resize: vertical;
-}
-
-.repo-json code {
-  color: var(--accent-bright);
-  font-family: 'Consolas', 'Courier New', monospace;
-}
-
 .changelog {
   background: var(--bg-2);
   border: 1px solid var(--border);
@@ -949,13 +850,7 @@ body {
 
 /* ---- Responsive ---- */
 @media (max-width: 700px) {
-  .form-row {
-    grid-template-columns: 1fr;
-  }
   .hero-stats {
     gap: 32px;
-  }
-  .upload-card {
-    padding: 24px;
   }
 }

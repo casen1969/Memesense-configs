@@ -9,10 +9,10 @@ window.CONFIGS = [
   {"id": 15, "title": "ainzy legitrage", "category": "semi-rage", "author": "ainzy", "featured": false, "created_at": "2026-08-18 12:04:00", "code": "d3200656c6e07dfb"},
   {"id": 16, "title": "ainzy legit", "category": "legit", "author": "ainzy", "featured": false, "created_at": "2026-08-18 12:05:00", "code": "291a8ef6e664a8e9"},
   {"id": 17, "title": "ainzy closet", "category": "legit", "author": "ainzy", "tags": ["closet"], "featured": false, "created_at": "2026-08-18 12:06:00", "code": "7aa68c1cf90aeadc"},
-  {"id": 18, "title": "shefu", "category": "misc", "author": "shefu", "featured": false, "created_at": "2026-08-18 12:07:00", "code": "ed2b2ef35cc9ed8658f7e026a025b0c0"},
+  {"id": 18, "title": "shefu", "category": "legit", "author": "shefu", "featured": false, "created_at": "2026-08-18 12:07:00", "code": "ed2b2ef35cc9ed8658f7e026a025b0c0"},
   {"id": 19, "title": "Mogged", "category": "semi-rage", "author": "Mogged", "featured": true, "created_at": "2026-08-18 12:10:00", "versions": [
     {"version": "2.0", "code": "880bd5bc1a72582eea20c91e51ee2a78"},
     {"version": "1.0", "code": "6662ab38ef1176cbc1454ad3333a2cc2"}
   ]},
-  {"id": 20, "title": "tabzware", "category": "misc", "author": "tabzware", "featured": false, "created_at": "2026-08-18 12:09:00", "code": "345fffeb302d61fe"}
+  {"id": 20, "title": "tabzware", "category": "legit", "author": "tabzware", "featured": false, "created_at": "2026-08-18 12:09:00", "code": "345fffeb302d61fe"}
 ];

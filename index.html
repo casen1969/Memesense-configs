@@ -33,7 +33,8 @@
   <meta name="twitter:image" content="https://casen1969.github.io/Memesense-configs/icon.png" />
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="icon.png" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
   <link rel="apple-touch-icon" href="icon.png" />
   <link rel="image_src" href="https://casen1969.github.io/Memesense-configs/icon.png" />
 
@@ -86,9 +87,7 @@
         <li><a href="#configs" class="nav-link">Configs</a></li>
         <li><a href="#featured" class="nav-link">Featured</a></li>
         <li><a href="#leaderboard" class="nav-link">Leaderboard</a></li>
-        <li><a href="#upload" class="nav-link">Upload</a></li>
       </ul>
-      <button class="btn btn-primary nav-cta" data-open-upload>Upload Config</button>
       <button class="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
         <span></span><span></span><span></span>
       </button>
@@ -104,12 +103,11 @@
           Config Database
         </h1>
         <p class="hero-sub">
-          Thousands of configs. One home. Browse, rate, and share the community's most
-          sought-after MemeSense configs — completely free.
+          The community database for MemeSense configs. Browse, filter and copy the most
+          sought-after rage, legit and semi-rage config codes — completely free.
         </p>
         <div class="hero-actions">
           <a href="#configs" class="btn btn-primary btn-lg">Browse Configs</a>
-          <button class="btn btn-ghost btn-lg" data-open-upload>Upload Yours</button>
         </div>
         <div class="hero-stats">
           <div class="stat">
@@ -171,52 +169,6 @@
         <div id="leaderboardList" class="leaderboard"></div>
       </div>
     </section>
-
-    <section class="section section-alt" id="upload" aria-labelledby="upload-heading">
-      <div class="container upload-wrap">
-        <div class="upload-card">
-          <h2 class="section-title" id="upload-heading">Upload a Config</h2>
-          <p class="section-sub">New configs save to your browser and generate a block to add to <code>configs.js</code></p>
-          <form id="uploadForm" class="upload-form">
-            <div class="form-row">
-              <div class="field">
-                <label for="cfgName">Config Name</label>
-                <input id="cfgName" type="text" placeholder="e.g. Blatant Rage 2.0" required />
-              </div>
-              <div class="field">
-                <label for="cfgCategory">Category</label>
-                <select id="cfgCategory" class="select" required>
-                  <option value="">Select...</option>
-                  <option value="rage">Rage</option>
-                  <option value="legit">Legit</option>
-                  <option value="semi-rage">Semi-Rage</option>
-                  <option value="esp">ESP</option>
-                  <option value="misc">Misc</option>
-                </select>
-              </div>
-            </div>
-            <div class="field">
-              <label for="cfgAuthor">Author</label>
-              <input id="cfgAuthor" type="text" placeholder="Your name" required />
-            </div>
-            <div class="field">
-              <label for="cfgCode">Config Code</label>
-              <textarea id="cfgCode" rows="8" placeholder="Paste the leaked config code here..." required></textarea>
-            </div>
-            <div class="field">
-              <label for="cfgTags">Tags <span class="muted">(comma separated)</span></label>
-              <input id="cfgTags" type="text" placeholder="config, legit, cfg" />
-            </div>
-            <div class="field">
-              <label for="cfgChangelog">Changelog <span class="muted">(optional, one change per line)</span></label>
-              <textarea id="cfgChangelog" rows="4" placeholder="Improved resolver&#10;Fixed ESP glitches&#10;New menu colors"></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg">Submit Config</button>
-            <p id="uploadStatus" class="upload-status"></p>
-          </form>
-        </div>
-      </div>
-    </section>
   </main>
 
   <div class="modal-overlay hidden" id="configModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
@@ -241,7 +193,7 @@
     </div>
   </footer>
 
-  <script src="configs.js?v=3"></script>
-  <script src="script.js?v=3"></script>
+  <script src="configs.js?v=4"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>
