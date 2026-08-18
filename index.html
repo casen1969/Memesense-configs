@@ -172,6 +172,21 @@
   </main>
 
   <div class="modal-overlay hidden" id="configModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="safety-banner hidden" id="safetyBanner" role="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true">
+        <path d="M12 9v4"></path>
+        <path d="M12 17h.01"></path>
+        <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"></path>
+      </svg>
+      <div class="safety-banner-text">
+        <strong>Safety warning:</strong> This is a rage / semi-rage config and is riskier to use. Set <code>fps_max 86</code> to reduce your chances of getting detected.
+      </div>
+      <button class="safety-banner-close" id="safetyBannerClose" aria-label="Dismiss warning">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
     <div class="modal">
       <button class="modal-close" id="modalClose" aria-label="Close dialog">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true">
@@ -193,7 +208,7 @@
     </div>
   </footer>
 
-  <script src="configs.js?v=4"></script>
-  <script src="script.js?v=4"></script>
+  <script src="configs.js?v=5"></script>
+  <script src="script.js?v=5"></script>
 </body>
 </html>

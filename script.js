@@ -199,11 +199,9 @@
     let currentVersion = versions.length ? versions[0] : null;
     let activeCode = currentVersion ? currentVersion.code : current.code;
 
-    const safetyWarning = ['rage', 'semi-rage'].includes(current.category)
-      ? `<div class="safety-warning" role="alert">
-          <strong>Safety warning:</strong> Rage & semi-rage configs are riskier. Set <code>fps_max 86</code> to reduce your chances of getting detected.
-        </div>`
-      : '';
+    const isRisky = ['rage', 'semi-rage'].includes(current.category);
+    const safetyBanner = document.getElementById('safetyBanner');
+    if (safetyBanner) safetyBanner.classList.toggle('hidden', !isRisky);
 
     modalContent.innerHTML = `
       <div class="modal-head">
@@ -214,7 +212,6 @@
         <span>Author: <strong>${escapeHtml(current.author)}</strong></span>
         <span>${timeAgo(current.created_at) || ''}</span>
       </div>
-      ${safetyWarning}
       ${versionSelectHtml(current)}
       <div class="code-block" id="modalCode">${escapeHtml(activeCode)}</div>
       ${changelogHtml(current)}
@@ -263,6 +260,8 @@
   function closeModal() {
     modal.classList.add('hidden');
     document.body.style.overflow = '';
+    const safetyBanner = document.getElementById('safetyBanner');
+    if (safetyBanner) safetyBanner.classList.add('hidden');
   }
 
   // ---- Events ----
@@ -281,6 +280,13 @@
   });
 
   modalClose.addEventListener('click', closeModal);
+  const safetyBannerClose = document.getElementById('safetyBannerClose');
+  if (safetyBannerClose) {
+    safetyBannerClose.addEventListener('click', () => {
+      const safetyBanner = document.getElementById('safetyBanner');
+      if (safetyBanner) safetyBanner.classList.add('hidden');
+    });
+  }
   modal.addEventListener('click', (e) => {
     if (e.target === modal) closeModal();
   });
