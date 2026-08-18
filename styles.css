@@ -894,6 +894,27 @@ body {
   min-width: 110px;
 }
 
+.safety-warning {
+  background: rgba(225, 29, 46, 0.1);
+  border: 1px solid var(--border-glow);
+  border-left: 4px solid var(--accent-bright);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.safety-warning code {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 7px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: var(--accent-bright);
+  font-weight: 600;
+}
+
 /* ---- Footer ---- */
 .site-footer {
   border-top: 1px solid var(--border);
